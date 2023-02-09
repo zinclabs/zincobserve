@@ -121,8 +121,8 @@ mod test_telemetry {
     use super::*;
     #[test]
     fn test_telemetry_new() {
-        let tel = Telemetry::new();
-        //println!("{:?}", tel);
+        let mut tel = Telemetry::new();
+        add_zo_info(&mut tel.base_info);
         assert!(tel.base_info.len() > 0)
     }
 }

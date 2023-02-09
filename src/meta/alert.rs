@@ -190,7 +190,20 @@ mod tests {
             value: serde_json::json!(5),
             is_numeric: None,
         };
+
+        let eq_condition = Condition {
+            column: "Country".to_owned(),
+            operator: AllOperator::EqualTo,
+            ignore_case: None,
+            value: serde_json::json!("USA"),
+            is_numeric: None,
+        };
+
         let row = serde_json::json!({"Country":"USA","occurance": 10});
-        condition.evaluate(row.as_object().unwrap().clone());
+        assert_eq!(condition.evaluate(row.as_object().unwrap().clone()), true);
+        assert_eq!(
+            eq_condition.evaluate(row.as_object().unwrap().clone()),
+            true
+        );
     }
 }
