@@ -1,6 +1,6 @@
 use crate::{
     handler::http::auth::is_admin_user,
-    infra::config::USERS,
+    infra::config::{STREAM_SCHEMAS, USERS},
     service::organization::{self},
 };
 use actix_web::{get, web, HttpResponse, Result};
@@ -48,6 +48,12 @@ pub async fn organizarions_by_username(
             identifier: "default".to_string(),
             label: "Default".to_string(),
         };
+        for schema in STREAM_SCHEMAS.iter() {
+            orgs.push(Organization {
+                identifier: schema.key().split('/').collect::<Vec<&str>>()[0].to_string(),
+                label: schema.key().split('/').collect::<Vec<&str>>()[0].to_string(),
+            });
+        }
         orgs.push(obj);
     } else {
         for user in USERS.iter() {
