@@ -97,7 +97,8 @@
         "inviteByEmail": "Invite by email. Multiple emails seperated by semicolon(;)",
         "inviteByEmailHint": "You'll be charged a prorated amount for adding a member.",
         "admin": "admin",
-        "member": "member"
+        "member": "member",
+        "changePassword": "Change Password"
     },
     "ticket": {
         "header": "Support Tickets",

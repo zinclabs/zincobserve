@@ -59,7 +59,7 @@
       />
       <div class="q-ml-xs">
         {{ resultTotal }}
-        {{ pageTitle.slice(-1) != "s" ? pageTitle.slice(0, -1) : pageTitle }}(s)
+        {{ pageTitle.slice(-1) == "s" ? pageTitle.slice(0, -1) : pageTitle }}(s)
       </div>
     </div>
     <div class="q-table__control q-ml-auto">

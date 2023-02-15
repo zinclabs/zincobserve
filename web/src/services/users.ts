@@ -27,8 +27,8 @@ const users = {
       `/api/users?page_num=${page_num}&page_size=${page_size}&sort_by=${sort_by}&desc=${desc}&name=${name}`
     );
   },
-  create: (data: any) => {
-    return http().post("/api/users", data);
+  create: (data: any, org_identifier: string) => {
+    return http().post(`/api/${org_identifier}/users`, data);
   },
   verifyUser: (email: string) => {
     return http().get(`/api/users/verifyuser/${email}`);

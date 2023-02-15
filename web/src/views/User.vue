@@ -80,6 +80,19 @@
             flat
             @click="updateUser(props)"
           />
+
+          <q-btn
+            v-if="props.row.email == store.state.userInfo.email"
+            icon="img:/src/assets/images/common/view_icon.svg"
+            :title="t('user.update')"
+            class="iconHoverBtn"
+            padding="sm"
+            unelevated
+            size="sm"
+            round
+            flat
+            @click="addUser(props, false)"
+          />
           <q-btn
             :title="t('user.updatenotallowed')"
             icon="img:/src/assets/images/common/view_icon.svg"
@@ -100,6 +113,18 @@
             flat
             @click="deleteUser(props)"
           />
+          <q-btn
+            v-if="props.row.isLoggedinUser"
+            icon="img:/src/assets/images/common/update_icon.svg"
+            :title="t('user.update')"
+            class="q-ml-xs iconHoverBtn"
+            padding="sm"
+            unelevated
+            size="sm"
+            round
+            flat
+            @click="addUser(props, true)"
+          />
         </q-td>
       </template>
       <template #top="scope">
@@ -119,7 +144,12 @@
             </template>
           </q-input>
 
-          <div class="col-5 q-pr-sm" v-if="currentUserRole == 'admin'">
+          <div
+            class="col-5 q-pr-sm"
+            v-if="
+              currentUserRole == 'admin' && config.isZincObserveCloud == 'true'
+            "
+          >
             <div class="row invite-user">
               <q-input
                 v-model="userEmail"
@@ -141,18 +171,31 @@
               </div>
             </div>
             <label class="inputHint">{{ t("user.inviteByEmailHint") }}</label>
+            <q-btn
+              v-if="currentUserRole == 'admin'"
+              class="col-1 text-bold no-border"
+              padding="sm 0"
+              color="secondary"
+              no-caps
+              :label="t(`user.sendInvite`)"
+              @click="inviteUser()"
+              :disable="userEmail == ''"
+            />
           </div>
 
-          <q-btn
-            v-if="currentUserRole == 'admin'"
-            class="col-1 text-bold no-border"
-            padding="sm 0"
-            color="secondary"
-            no-caps
-            :label="t(`user.sendInvite`)"
-            @click="inviteUser()"
-            :disable="userEmail == ''"
-          />
+          <div v-else class="col-6">
+            <q-btn
+              class="q-ml-md q-mb-xs text-bold no-border"
+              style="float: right; cursor: pointer !important"
+              padding="sm lg"
+              color="secondary"
+              no-caps
+              icon="add"
+              dense
+              :label="t(`user.add`)"
+              @click="addUser({}, false)"
+            />
+          </div>
         </div>
 
         <QTablePagination
@@ -182,6 +225,20 @@
       maximized
     >
       <update-user-role v-model="selectedUser" @updated="updateMember" />
+    </q-dialog>
+
+    <q-dialog
+      v-model="showAddUserDialog"
+      position="right"
+      full-height
+      maximized
+    >
+      <add-user
+        style="width: 35vw"
+        v-model="selectedUser"
+        :isUpdated="isUpdated"
+        @updated="addMember"
+      />
     </q-dialog>
 
     <q-dialog v-model="confirmDelete">
@@ -220,13 +277,15 @@ import { useI18n } from "vue-i18n";
 import QTablePagination from "../components/shared/grid/Pagination.vue";
 import usersService from "../services/users";
 import UpdateUserRole from "../components/users/UpdateRole.vue"
+import AddUser from "../components/users/add.vue"
 import NoData from "../components/shared/grid/NoData.vue";
 import { validateEmail } from "../utils/zincutils";
+import config from "../aws-exports";
 import organizationsService from "../services/organizations";
 
 export default defineComponent({
   name: "PageUser",
-  components: { QTablePagination, UpdateUserRole, NoData },
+  components: { QTablePagination, UpdateUserRole, NoData, AddUser },
   emits: [
     "updated:fields",
     "deleted:fields",
@@ -242,9 +301,11 @@ export default defineComponent({
     const orgMembers: any = ref([]);
     const resultTotal = ref<number>(0);
     const showUpdateUserDialog: any = ref(false);
+    const showAddUserDialog: any = ref(false);
     const confirmDelete = ref<boolean>(false);
     const selectedUser: any = ref({});
     const orgData: any = ref(store.state.selectedOrganization);
+    const isUpdated: any = ref(false);
     const qTable: any = ref(null);
     const columns: any = ref<QTableProps["columns"]>([
       {
@@ -294,8 +355,8 @@ export default defineComponent({
     const selectedRole = ref(options[0]);
     const currentUserRole = ref('')
 
-    const getOrgMembers = (orgId: number) => {
-      if (orgId > 0) {
+    const getOrgMembers = (orgId: string) => {
+      if (orgId != "") {
         const dismiss = $q.notify({
           spinner: true,
           message: "Please wait while loading users...",
@@ -337,7 +398,7 @@ export default defineComponent({
     };
 
     if (orgMembers.value.length == 0) {
-      getOrgMembers(store.state.selectedOrganization.id);
+      getOrgMembers(store.state.selectedOrganization.identifier);
     }
 
     interface OptionType {
@@ -371,6 +432,17 @@ export default defineComponent({
       showUpdateUserDialog.value = true;
     }
 
+    const addUser = (props: any, is_updated: boolean) => {
+      isUpdated.value = is_updated;
+      if (props.row != undefined) {
+        selectedUser.value = props.row;  
+      } else {
+        selectedUser.value = {};
+      }
+      
+      showAddUserDialog.value = true;
+    }
+
     const updateMember = (data: any) => {
       if (data.data != undefined) {
         orgMembers.value.forEach((member: any, key: number) => {
@@ -379,6 +451,21 @@ export default defineComponent({
           }
         });
         showUpdateUserDialog.value = false;
+      }
+    }
+
+    const addMember = (data: any) => {
+      alert("addMember")
+      if (data.data != undefined) {
+        alert(JSON.stringify(data.data))
+        orgMembers.value.push({
+          "#": orgMembers.value.length + 1,
+          email: data.data.email,
+          first_name: data.data.first_name,
+          last_name: data.data.last_name,
+          role: data.data.role,
+        });
+        showAddUserDialog.value = false;
       }
     }
 
@@ -480,6 +567,7 @@ export default defineComponent({
       qTable,
       router,
       store,
+      config,
       orgMembers,
       columns,
       orgData,
@@ -488,6 +576,10 @@ export default defineComponent({
       getOrgMembers,
       updateUser,
       updateMember,
+      addUser,
+      addMember,
+      isUpdated,
+      showAddUserDialog,
       pagination,
       resultTotal,
       selectedUser,
@@ -525,7 +617,7 @@ export default defineComponent({
     selectedOrg(newVal: any, oldVal: any) {
       this.orgData = newVal;
       if ((newVal != oldVal || this.orgMembers.value == undefined) && this.router.currentRoute.value.name == "users") {
-        this.getOrgMembers(this.store.state.selectedOrganization.id);
+        this.getOrgMembers(this.store.state.selectedOrganization.identifier);
       }
     }
   }
