@@ -85,7 +85,8 @@ pub async fn init() -> Result<(), anyhow::Error> {
     tokio::task::spawn(async move { alert_manager::run().await });
 
     // ingester run
-    tokio::task::spawn(async move { files::run().await });
+    tokio::task::spawn(async move { files::disk::run().await });
+    tokio::task::spawn(async move { files::memory::run().await });
     tokio::task::spawn(async move { file_list::run().await });
     tokio::task::spawn(async move { prom::run().await });
 

@@ -27,6 +27,9 @@ pub async fn run() -> Result<(), anyhow::Error> {
         return Ok(()); // not an ingester, no need to init job
     }
 
+    // create wal dir
+    fs::create_dir_all(&CONFIG.common.data_wal_dir)?;
+
     let mut interval = time::interval(time::Duration::from_secs(CONFIG.limit.file_push_interval));
     interval.tick().await; // trigger the first run
     loop {

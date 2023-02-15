@@ -37,6 +37,7 @@ use zincobserve::handler::grpc::request::{event::Eventer, search::Searcher, trac
 use zincobserve::handler::http::router::{get_basic_routes, get_service_routes};
 use zincobserve::infra::cluster;
 use zincobserve::infra::config::CONFIG;
+use zincobserve::infra::file_lock;
 use zincobserve::meta::telemetry::Telemetry;
 use zincobserve::service::router;
 
@@ -198,6 +199,8 @@ async fn main() -> Result<(), anyhow::Error> {
         .await;
     // leave the cluster
     let _ = cluster::leave().await;
+    // flush WAL cache to disk
+    file_lock::flush_all();
 
     log::info!("server stopped");
 

@@ -275,6 +275,7 @@ pub async fn traces_json(
             traces_stream_name,
             StreamType::Traces,
             &key,
+            false,
         );
         let traces_file_name = file.full_name();
 

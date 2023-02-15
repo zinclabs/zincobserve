@@ -63,6 +63,7 @@ export default defineConfig({
     },
   },
   build: {
+    sourcemap: false,
     target: "es2020",
     rollupOptions: {
       plugins: [nodePolyfills()],

@@ -131,12 +131,12 @@ async fn get_stream_alerts<'a>(key: String, stream_alerts_map: &mut AHashMap<Str
 }
 
 async fn get_stream_partition_keys(
-    index_name: String,
-    index_schema_map: AHashMap<String, Schema>,
+    stream_name: String,
+    stream_schema_map: AHashMap<String, Schema>,
 ) -> Vec<String> {
     let mut keys: Vec<String> = vec![];
-    if index_schema_map.contains_key(&index_name) {
-        let schema = index_schema_map.get(&index_name).unwrap();
+    if stream_schema_map.contains_key(&stream_name) {
+        let schema = stream_schema_map.get(&stream_name).unwrap();
         let mut meta = schema.metadata().clone();
         meta.remove("created_at");
         let mut v: Vec<_> = meta.into_iter().collect();

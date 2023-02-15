@@ -213,6 +213,7 @@ pub async fn handle_trace_request(
             traces_stream_name,
             StreamType::Traces,
             &key,
+            false,
         );
         let traces_file_name = file.full_name();
 

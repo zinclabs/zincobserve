@@ -125,6 +125,8 @@ pub struct Common {
     pub data_wal_dir: String,
     #[env_config(name = "ZO_DATA_STREAM_DIR", default = "./data/stream/")]
     pub data_stream_dir: String,
+    #[env_config(name = "ZO_WAL_MEMORY_MODE_ENABLED", default = false)]
+    pub wal_memory_mode_enabled: bool,
     #[env_config(name = "ZO_FILE_EXT_JSON", default = ".json")]
     pub file_ext_json: String,
     #[env_config(name = "ZO_FILE_EXT_PARQUET", default = ".parquet")]

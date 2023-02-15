@@ -47,7 +47,7 @@ pub async fn run() -> Result<(), anyhow::Error> {
     loop {
         interval.tick().await;
         if let Err(e) = move_files_to_storage().await {
-            log::error!("Error moving files to remote: {}", e);
+            log::error!("Error moving disk files to remote: {}", e);
         }
     }
 }
@@ -77,7 +77,6 @@ async fn move_files_to_storage() -> Result<(), anyhow::Error> {
             .unwrap()
             .replace('\\', "/");
         let columns = file_path.split('/').collect::<Vec<&str>>();
-        // check file is in use
         if columns.len() != 5 {
             continue;
         }
@@ -92,7 +91,7 @@ async fn move_files_to_storage() -> Result<(), anyhow::Error> {
             // println!("file is using for write, skip, {}", file_name);
             continue;
         }
-        log::info!("[JOB] convert file: {}", file);
+        log::info!("[JOB] convert disk file: {}", file);
 
         let mut partitions = file_name.split('_').collect::<Vec<&str>>();
         partitions.retain(|&x| x.contains('='));
@@ -132,22 +131,22 @@ async fn move_files_to_storage() -> Result<(), anyhow::Error> {
                             Ok(_) => {}
                             Err(e) => {
                                 log::error!(
-                                    "[JOB] Failed to remove file {}: {}",
+                                    "[JOB] Failed to remove disk file from disk: {}, {}",
                                     path,
                                     e.to_string()
                                 )
                             }
                         },
                         Err(e) => log::error!(
-                            "[JOB] Failed write file meta:{}, error: {}",
+                            "[JOB] Failed write disk file meta:{}, error: {}",
                             path,
                             e.to_string()
                         ),
                     }
                 }
-                Err(e) => log::error!("[JOB] Error while uploading file to storage {}", e),
+                Err(e) => log::error!("[JOB] Error while uploading disk file to storage {}", e),
             },
-            Err(e) => log::error!("[JOB] Error while uploading file to storage {}", e),
+            Err(e) => log::error!("[JOB] Error while uploading disk file to storage {}", e),
         };
     }
 
@@ -164,10 +163,10 @@ async fn upload_file(
     let mut file = fs::File::open(path_str).unwrap();
     let file_meta = file.metadata().unwrap();
     let file_size = file_meta.len();
-    log::info!("[JOB] File upload begin: local: {}", path_str);
+    log::info!("[JOB] File upload begin: disk: {}", path_str);
 
     let mut schema_reader = BufReader::new(&file);
-    let inferred_schema = infer_json_schema(&mut schema_reader, Some(8192)).unwrap();
+    let inferred_schema = infer_json_schema(&mut schema_reader, None).unwrap();
     let arrow_schema = Arc::new(inferred_schema.clone());
     drop(schema_reader);
 
@@ -236,11 +235,11 @@ async fn upload_file(
         .await;
     match result {
         Ok(_output) => {
-            log::info!("[JOB] File upload success: {}", new_file_key);
+            log::info!("[JOB] disk file upload success: {}", new_file_key);
             Ok((new_file_key, file_meta, stream_type))
         }
         Err(err) => {
-            log::error!("[JOB] File upload error: {:?}", err);
+            log::error!("[JOB] disk file upload error: {:?}", err);
             Err(anyhow::anyhow!(err))
         }
     }

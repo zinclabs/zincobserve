@@ -215,6 +215,7 @@ pub async fn prometheus_write_proto(
                 &metric_name,
                 StreamType::Metrics,
                 &key,
+                false,
             );
             if metric_file_name.is_empty() {
                 metric_file_name = file.full_name();

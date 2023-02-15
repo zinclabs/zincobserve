@@ -21,7 +21,6 @@ use datafusion::arrow::datatypes::Schema;
 use mlua::{Function, Lua};
 use prometheus::GaugeVec;
 use serde_json::Value;
-use std::fs::OpenOptions;
 use std::io::{BufRead, BufReader, Error};
 
 use crate::common::json;
@@ -38,7 +37,7 @@ use crate::meta::http::HttpResponse as MetaHttpResponse;
 use crate::meta::ingestion::{IngestionResponse, RecordStatus, StreamStatus};
 use crate::meta::StreamType;
 use crate::service::logs::StreamMeta;
-use crate::service::schema::{add_stream_schema, stream_schema_exists};
+use crate::service::schema::stream_schema_exists;
 
 pub async fn ingest(
     org_id: &str,
@@ -176,6 +175,8 @@ pub async fn ingest(
             CONFIG.common.time_stamp_col.clone(),
             Value::Number(timestamp.into()),
         );
+
+        // write data
         let local_trigger = super::add_valid_record(
             StreamMeta {
                 org_id: org_id.to_string(),
@@ -196,7 +197,7 @@ pub async fn ingest(
     }
 
     // write to file
-    let mut index_file_name = "".to_string();
+    let mut stream_file_name = "".to_string();
     let mut write_buf = BytesMut::new();
     for (key, entry) in buf {
         if entry.is_empty() {
@@ -213,9 +214,10 @@ pub async fn ingest(
             stream_name,
             StreamType::Logs,
             &key,
+            CONFIG.common.wal_memory_mode_enabled,
         );
-        if index_file_name.is_empty() {
-            index_file_name = file.full_name();
+        if stream_file_name.is_empty() {
+            stream_file_name = file.full_name();
         }
         file.write(write_buf.as_ref());
 
@@ -228,7 +230,7 @@ pub async fn ingest(
             .add(write_buf.len() as f64);
     }
 
-    if index_file_name.is_empty() {
+    if stream_file_name.is_empty() {
         return Ok(HttpResponse::Ok().json(IngestionResponse::new(
             http::StatusCode::OK.into(),
             vec![stream_status],
@@ -253,18 +255,6 @@ pub async fn ingest(
         .with_label_values(&[org_id, stream_name, "req_num"])
         .inc();
 
-    if !stream_schema.has_fields {
-        let file = OpenOptions::new().read(true).open(index_file_name).unwrap();
-        add_stream_schema(
-            org_id,
-            stream_name,
-            StreamType::Logs,
-            &file,
-            &mut stream_schema_map,
-            min_ts,
-        )
-        .await;
-    }
     Ok(HttpResponse::Ok().json(IngestionResponse::new(
         http::StatusCode::OK.into(),
         vec![stream_status],

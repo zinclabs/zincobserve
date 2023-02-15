@@ -72,10 +72,7 @@ pub async fn organizarions_by_username(
         };
 
         for user in USERS.iter() {
-            if !user
-                .key()
-                .ends_with(format!("{}", &CONFIG.auth.username).as_str())
-            {
+            if !user.key().ends_with(&CONFIG.auth.username) {
                 orgs.push(Organization {
                     identifier: user.key().split('/').collect::<Vec<&str>>()[0].to_string(),
                     label: user.key().split('/').collect::<Vec<&str>>()[0].to_string(),
@@ -114,7 +111,7 @@ pub async fn organizations(credentials: BasicAuth) -> Result<HttpResponse, Error
     if is_admin_user(user_id).await {
         id += 1;
         orgs.push(OrganizationDetails {
-            id: id,
+            id,
             identifier: DEFAULT.to_string(),
             name: DEFAULT.to_string(),
             user_email: user_id.to_string(),
@@ -125,13 +122,10 @@ pub async fn organizations(credentials: BasicAuth) -> Result<HttpResponse, Error
         });
 
         for user in USERS.iter() {
-            if !user
-                .key()
-                .ends_with(format!("{}", &CONFIG.auth.username).as_str())
-            {
+            if !user.key().ends_with(&CONFIG.auth.username) {
                 id += 1;
                 orgs.push(OrganizationDetails {
-                    id: id,
+                    id,
                     identifier: user.key().split('/').collect::<Vec<&str>>()[0].to_string(),
                     name: user.key().split('/').collect::<Vec<&str>>()[0].to_string(),
                     user_email: user_id.to_string(),
@@ -148,7 +142,7 @@ pub async fn organizations(credentials: BasicAuth) -> Result<HttpResponse, Error
                 id += 1;
 
                 orgs.push(OrganizationDetails {
-                    id: id,
+                    id,
                     identifier: user.key().split('/').collect::<Vec<&str>>()[0].to_string(),
                     name: user.key().split('/').collect::<Vec<&str>>()[0].to_string(),
                     user_email: user_id.to_string(),

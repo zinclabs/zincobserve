@@ -85,8 +85,14 @@ pub async fn ingest(
             write_buf.put(row.as_bytes());
             write_buf.put("\n".as_bytes());
         }
-        let file =
-            file_lock::get_or_create(thread_id, org_id, stream_name, StreamType::Metadata, &key);
+        let file = file_lock::get_or_create(
+            thread_id,
+            org_id,
+            stream_name,
+            StreamType::Metadata,
+            &key,
+            false,
+        );
         if meta_file_name.is_empty() {
             meta_file_name = file.full_name();
         }

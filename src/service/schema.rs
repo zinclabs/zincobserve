@@ -196,16 +196,23 @@ pub async fn check_for_schema(
         schema
     };
 
-    if schema == Schema::empty() {
-        let mut schema_reader = BufReader::new(val_str.as_bytes());
-        let inferred_schema = infer_json_schema(&mut schema_reader, Some(1)).unwrap();
-        stream_schema_map.insert(stream_name.to_string(), inferred_schema);
+    let mut schema_reader = BufReader::new(val_str.as_bytes());
+    let inferred_schema = infer_json_schema(&mut schema_reader, None).unwrap();
+    if schema.fields.eq(&inferred_schema.fields) {
         return (true, None);
     }
 
-    let mut schema_reader = BufReader::new(val_str.as_bytes());
-    let inferred_schema = infer_json_schema(&mut schema_reader, Some(1)).unwrap();
-    if schema.fields.eq(&inferred_schema.fields) {
+    if schema == Schema::empty() {
+        stream_schema_map.insert(stream_name.to_string(), inferred_schema.clone());
+        db::schema::set(
+            org_id,
+            stream_name,
+            stream_type,
+            &inferred_schema,
+            Some(record_ts),
+        )
+        .await
+        .unwrap();
         return (true, None);
     }
 

@@ -21,7 +21,6 @@ use datafusion::arrow::datatypes::Schema;
 use mlua::{Function, Lua};
 use prometheus::GaugeVec;
 use serde_json::Value;
-use std::fs::OpenOptions;
 use std::io::{BufRead, BufReader, Error};
 
 use super::StreamMeta;
@@ -37,7 +36,7 @@ use crate::meta::ingestion::{
     IngestionResponse, RecordStatus, StreamData, StreamSchemaChk, StreamStatus,
 };
 use crate::meta::StreamType;
-use crate::service::schema::{add_stream_schema, stream_schema_exists};
+use crate::service::schema::stream_schema_exists;
 use crate::{common::time::parse_timestamp_micro_from_value, meta::alert::Trigger};
 
 pub async fn ingest(
@@ -255,6 +254,7 @@ pub async fn ingest(
                 &stream_name,
                 StreamType::Logs,
                 &key,
+                CONFIG.common.wal_memory_mode_enabled,
             );
             if stream_file_name.is_empty() {
                 stream_file_name = file.full_name();
@@ -279,23 +279,6 @@ pub async fn ingest(
             name: stream_name.to_string(),
             status: stream_data.status,
         });
-
-        let schema_exists = stream_partition_keys_map.get(&stream_name).unwrap();
-        if !schema_exists.0.has_fields {
-            let file = OpenOptions::new()
-                .read(true)
-                .open(&stream_file_name)
-                .unwrap();
-            add_stream_schema(
-                org_id,
-                &stream_name,
-                StreamType::Logs,
-                &file,
-                &mut stream_schema_map,
-                min_ts,
-            )
-            .await;
-        }
     }
 
     // only one trigger per request, as it updates etcd

@@ -3,7 +3,7 @@ WORKDIR /web
 COPY ./web /web/
 
 RUN npm install
-RUN NODE_OPTIONS="--max-old-space-size=6192" npm run build
+RUN NODE_OPTIONS="--max-old-space-size=8192" npm run build
 
 FROM public.ecr.aws/docker/library/rust:bullseye as builder
 RUN apt-get update

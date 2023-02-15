@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use bytes::{Bytes, BytesMut};
 use std::collections::HashMap;
 use std::fs::{File, OpenOptions};
 use std::io::Write;
@@ -23,6 +24,7 @@ use crate::meta::StreamType;
 
 lazy_static! {
     pub static ref LOCKER: Locker = Locker::new();
+    pub static ref FILES: RwLock<HashMap<String, Bytes>> = RwLock::new(HashMap::with_capacity(16));
 }
 
 pub struct Locker {
@@ -33,24 +35,27 @@ type RwData = RwLock<HashMap<String, Arc<RwFile>>>;
 
 #[derive(Debug)]
 pub struct RwFile {
-    file: RwLock<File>,
+    use_cache: bool,
+    file: Option<RwLock<File>>,
+    cache: Option<RwLock<BytesMut>>,
     dir: String,
     name: String,
     expired: i64,
 }
 
-#[inline(always)]
+#[inline]
 pub fn get_or_create(
     thread_id: usize,
     org_id: &str,
     stream_name: &str,
     stream_type: StreamType,
     key: &str,
+    use_cache: bool,
 ) -> Arc<RwFile> {
-    LOCKER.get_or_create(thread_id, org_id, stream_name, stream_type, key)
+    LOCKER.get_or_create(thread_id, org_id, stream_name, stream_type, key, use_cache)
 }
 
-#[inline(always)]
+#[inline]
 pub fn check_in_use(
     org_id: &str,
     stream_name: &str,
@@ -58,6 +63,27 @@ pub fn check_in_use(
     file_name: &str,
 ) -> bool {
     LOCKER.check_in_use(org_id, stream_name, stream_type, file_name)
+}
+
+#[inline]
+pub fn flush_all() {
+    for data in LOCKER.data.iter() {
+        let thread_data = data.read().unwrap();
+        for (_, file) in thread_data.iter() {
+            file.sync();
+        }
+    }
+
+    for (file, data) in FILES.read().unwrap().iter() {
+        let file_path = format!("{}{}", CONFIG.common.data_wal_dir, file);
+        let mut f = OpenOptions::new()
+            .write(true)
+            .create(true)
+            .append(true)
+            .open(file_path)
+            .unwrap();
+        f.write_all(data).unwrap();
+    }
 }
 
 impl Default for Locker {
@@ -105,13 +131,13 @@ impl Locker {
         if file.size() >= (CONFIG.limit.max_file_size_on_disk as i64)
             || file.expired() <= chrono::Utc::now().timestamp()
         {
-            file.sync();
             self.data
                 .get(thread_id)
                 .unwrap()
                 .write()
                 .unwrap()
                 .remove(&full_key);
+            file.sync();
             return None;
         }
 
@@ -125,6 +151,7 @@ impl Locker {
         stream_name: &str,
         stream_type: StreamType,
         key: &str,
+        use_cache: bool,
     ) -> Arc<RwFile> {
         let full_key = format!("{}_{}_{}_{}", org_id, stream_name, stream_type, key);
         let file = Arc::new(RwFile::new(
@@ -133,6 +160,7 @@ impl Locker {
             stream_name,
             stream_type,
             key,
+            use_cache,
         ));
         let mut data = self.data.get(thread_id).unwrap().write().unwrap();
         data.insert(full_key, file.clone());
@@ -146,11 +174,12 @@ impl Locker {
         stream_name: &str,
         stream_type: StreamType,
         key: &str,
+        use_cache: bool,
     ) -> Arc<RwFile> {
         if let Some(file) = self.get(thread_id, org_id, stream_name, stream_type, key) {
             file
         } else {
-            self.create(thread_id, org_id, stream_name, stream_type, key)
+            self.create(thread_id, org_id, stream_name, stream_type, key, use_cache)
         }
     }
 
@@ -180,6 +209,7 @@ impl RwFile {
         stream_name: &str,
         stream_type: StreamType,
         key: &str,
+        use_cache: bool,
     ) -> RwFile {
         let mut dir_path = format!(
             "{}files/{}/{}/{}/",
@@ -198,41 +228,111 @@ impl RwFile {
         let file_path = format!("{}{}", dir_path, file_name);
         std::fs::create_dir_all(&dir_path).unwrap();
 
-        let f = OpenOptions::new()
-            .write(true)
-            .create(true)
-            .append(true)
-            .open(file_path)
-            .unwrap();
+        let (file, cache) = match use_cache {
+            true => (
+                None,
+                Some(RwLock::new(BytesMut::with_capacity(
+                    CONFIG.limit.max_file_size_on_disk as usize / 16,
+                ))),
+            ),
+            false => {
+                let f = OpenOptions::new()
+                    .write(true)
+                    .create(true)
+                    .append(true)
+                    .open(file_path)
+                    .unwrap();
+                (Some(RwLock::new(f)), None)
+            }
+        };
         RwFile {
-            file: RwLock::new(f),
+            use_cache,
+            file,
+            cache,
             dir: dir_path,
             name: file_name,
             expired: chrono::Utc::now().timestamp() + CONFIG.limit.max_file_retention_time as i64,
         }
     }
 
+    #[inline]
     pub fn write(&self, data: &[u8]) {
-        let mut f = self.file.write().unwrap();
-        f.write_all(data).unwrap();
+        match self.use_cache {
+            true => {
+                self.cache
+                    .as_ref()
+                    .unwrap()
+                    .write()
+                    .unwrap()
+                    .extend_from_slice(data);
+            }
+            false => {
+                self.file
+                    .as_ref()
+                    .unwrap()
+                    .write()
+                    .unwrap()
+                    .write_all(data)
+                    .unwrap();
+            }
+        }
     }
 
+    #[inline]
     pub fn sync(&self) {
-        self.file.write().unwrap().sync_all().unwrap();
+        match self.use_cache {
+            true => {
+                let file_path = format!("{}{}", self.dir, self.name);
+                let file_path = file_path.strip_prefix(&CONFIG.common.data_wal_dir).unwrap();
+                FILES.write().unwrap().insert(
+                    file_path.to_string(),
+                    self.cache
+                        .as_ref()
+                        .unwrap()
+                        .read()
+                        .unwrap()
+                        .to_owned()
+                        .freeze(),
+                );
+            }
+            false => self
+                .file
+                .as_ref()
+                .unwrap()
+                .write()
+                .unwrap()
+                .sync_all()
+                .unwrap(),
+        };
     }
 
+    #[inline]
     pub fn size(&self) -> i64 {
-        self.file.read().unwrap().metadata().unwrap().len() as i64
+        match self.use_cache {
+            true => self.cache.as_ref().unwrap().write().unwrap().len() as i64,
+            false => self
+                .file
+                .as_ref()
+                .unwrap()
+                .read()
+                .unwrap()
+                .metadata()
+                .unwrap()
+                .len() as i64,
+        }
     }
 
+    #[inline]
     pub fn name(&self) -> &str {
         &self.name
     }
 
+    #[inline]
     pub fn full_name(&self) -> String {
         format!("{}{}", self.dir, self.name)
     }
 
+    #[inline]
     pub fn expired(&self) -> i64 {
         self.expired
     }
@@ -250,7 +350,7 @@ mod tests {
         let stream_name = "stream1";
         let stream_type = StreamType::Logs;
         let key = "2022_10_17_10";
-        let file = locker.get_or_create(thread_id, org_id, stream_name, stream_type, key);
+        let file = locker.get_or_create(thread_id, org_id, stream_name, stream_type, key, false);
         file.write(b"hello world");
         assert_eq!(file.size(), 11);
         assert_eq!(file.name().contains(key), true);
@@ -272,7 +372,7 @@ mod tests {
         let stream_name = "";
         let stream_type = StreamType::Filelist;
         let key = "2022_10_17_10";
-        let file = locker.get_or_create(thread_id, org_id, stream_name, stream_type, key);
+        let file = locker.get_or_create(thread_id, org_id, stream_name, stream_type, key, false);
         file.write(b"hello world");
         assert_eq!(file.size(), 11);
         assert_eq!(file.name().contains(key), true);
