@@ -8,6 +8,7 @@
       :virtual-scroll-sticky-size-start="48"
       dense
       :rows="searchQueryData?.data || []"
+      :columns="tableColumn"
       row-key="id"
     >
     </q-table>
@@ -59,12 +60,32 @@ export default defineComponent({
       return props.selectedTimeDate;
     });
 
+    const tableColumn : any = ref([]);
+
+    // set column value for type chart if the axis value is undefined
+    const updateTableColumns = () => {
+      const x = props.data?.fields?.x || []
+      const y = props.data?.fields?.y || []
+      const columnData = [...x, ...y]
+      
+      const column = columnData.map((it:any)=>{
+        let obj : any= {}
+        obj["name"] = it.label
+        obj["field"] = it.label
+        obj["label"] = it.label
+        obj["sortable"] = true
+        return obj
+      })
+      tableColumn.value = column
+    }
+
     // If query changes, we need to get the data again and rerender the chart
     watch(
       () => [props.data, props.selectedTimeDate],
       () => {
         if (props.data.query) {
           fetchQueryData();
+          updateTableColumns();
         } else {
           Plotly.react(
             plotRef.value,
@@ -337,6 +358,7 @@ export default defineComponent({
         rowsPerPage: 0,
       }),
       chartID,
+      tableColumn
     };
   },
 });
