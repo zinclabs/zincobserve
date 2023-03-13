@@ -129,7 +129,7 @@ export default defineComponent({
         // now add from stream name
         query += ` FROM '${dashboardPanelData.data.fields.stream}' `
 
-        query += filter.length ? "WHERE " : ""
+        query += filter.some((it)=> ((it.type == "list" && it.values?.length > 0) || (it.type == "condition" && it.operator != null && it.value != null && it.value != ''))) ? "WHERE " : ""
         const filterData = filter?.map((field, i)=>{
           let selectFilter = ""
             if(field.type == "list" && field.values?.length > 0){
