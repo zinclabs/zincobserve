@@ -164,7 +164,7 @@ export default defineComponent({
       });
     };
 
-    const savePanelChangesToDashboard = async (dashId: String) => {
+    const savePanelChangesToDashboard = async (dashId: string) => {
       if (editMode.value) {
         await updatePanel(
           store,
@@ -185,7 +185,8 @@ export default defineComponent({
 
       await nextTick();
       return router.push({
-        path: "/viewDashboard?dashboard=" + dashId,
+        path: "/viewDashboard",
+        query: { dashboard: dashId },
       });
     };
 
