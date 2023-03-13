@@ -10,13 +10,6 @@
         >
             <index-list/>
         </div>
-        <!-- <div v-else-if="dashboardPanelData.meta.stream.loading == true">
-            <q-spinner-dots
-            color="primary"
-            size="40px"
-            style="margin: 0 auto; display: block"
-            />
-        </div> -->
     </div>
 </template>
 

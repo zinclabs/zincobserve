@@ -245,11 +245,6 @@ export default defineComponent({
         dashboardPanelData.meta.filterValue = [];
       }
 
-      // dashboardPanelData.meta.filterValue.push({
-      //   column: name,
-      //   value: ["abc", "def"]
-      // })
-      console.log("filterValue array= ", dashboardPanelData.meta.filterValue);
       if (
         !dashboardPanelData.meta.filterValue.find(
           (it: any) => it.column == name
@@ -286,13 +281,6 @@ export default defineComponent({
                 .filter((it: any) => it),
             });
 
-            // dashboardPanelData.data.fields.filter.find((it:any) => it.column == name).values =  res.data.hits.map((it:any)=>it.value)
-
-            // $q.notify({
-            //     type: "positive",
-            //     message: "Query applied successfully.",
-            //     timeout: 5000,
-            // });
           })
           .catch((error) => {
             $q.notify({
