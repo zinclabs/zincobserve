@@ -177,7 +177,7 @@
                             label="Aggregation"
                           ></q-select>
                         </div>
-                        <div class="color-input-wrapper">
+                        <div class="color-input-wrapper" v-if="!['table', 'pie'].includes(dashboardPanelData.data.type)">
                           <input
                             type="color"
                             v-model="
@@ -214,13 +214,14 @@
       <q-expansion-item default-opened dense :label="t(`Config`)">
         <div>
           <q-toggle
+            v-if="dashboardPanelData.data.type != 'table'"
             v-model="dashboardPanelData.data.config.show_legends"
             label="Show Legends"
           />
           <q-form ref="" class="q-pa-sm">
             <q-input
               v-model="dashboardPanelData.data.config.title"
-              :label="t('panel.name')"
+              :label="t('panel.name') + '*'"
               class="q-py-md showLabelOnTop"
               stack-label
               filled

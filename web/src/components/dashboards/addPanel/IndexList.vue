@@ -63,17 +63,19 @@
                     color="white"
                     padding="sm"
                     text-color="black"
+                    :disabled="dashboardPanelData.data.fields.x.length >= 1 ? true : false"
                     @click="addXAxisItem(props.row.name)"
                   >
-                    <div>+X</div>
+                    <div>{{ dashboardPanelData.data.type != 'h-bar' ? '+X' : '+Y' }}</div>
                   </q-btn>
                   <q-btn
                     color="white"
                     padding="sm"
                     text-color="black"
+                    :disabled="dashboardPanelData.data.fields.y.length >= 1 && dashboardPanelData.data.type == 'pie'  ? true : false"
                     @click="addYAxisItem(props.row.name)"
                   >
-                    <div>+Y</div>
+                    <div>{{ dashboardPanelData.data.type != 'h-bar' ? '+Y' : '+X' }}</div>
                   </q-btn>
                   <q-btn
                     color="white"

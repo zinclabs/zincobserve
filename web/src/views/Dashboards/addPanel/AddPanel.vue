@@ -164,7 +164,69 @@ export default defineComponent({
       });
     };
 
+    const isValid = () => {
+      const error = []
+      const dashboardData = dashboardPanelData.data
+
+      if(!dashboardData.fields.x.length){
+        error.push("Please add at least one field in X axis")
+      }
+
+      if(!dashboardData.fields.y.length){
+        error.push("Please add at least one field in Y axis")
+      }
+
+      if(dashboardData.type == "pie" && dashboardData.fields.y.length > 1 ){
+        error.push("You can add only one field in the Y axis while, selected chart type is pie")
+      }
+
+      if(dashboardData.fields.y.length && dashboardData.fields.y.filter((it:any) => (it.aggregationFunction == null || it.aggregationFunction == '')).length){
+        error.push("Aggregation function required")
+      }
+
+      if(dashboardData.fields.y.length && dashboardData.fields.y.filter((it:any) => (it.label == null || it.label == '')).length){
+        error.push("label required")
+      }
+
+      if(dashboardData.config.title == null || dashboardData.config.title == '' ){
+        error.push("Panel Name is required")
+      }
+
+      if(!dashboardData.fields.filter.length){
+
+        if(dashboardData.fields.filter.filter((it:any) => ((it.type == "list" && !it.values?.length))).length){
+          error.push("Please select at least one list filter value")
+        }
+
+        if(dashboardData.fields.filter.filter((it:any) => (it.type == "condition" && it.operator == null)).length){
+          error.push("Please select at least one condition operator value")
+        }
+
+        if(dashboardData.fields.filter.filter((it:any) => (it.type == "condition" && (it.value == null || it.value == ''))).length){
+          error.push("Please select at least one condition value")
+        }
+
+      }
+      for (let index = 0; index < error.length; index++) {
+        $q.notify({
+          type: "negative",
+          message: error[index],
+          timeout: 5000,
+        });
+      }
+     
+      if(error.length){
+          return false
+        }else{
+          return true
+        }
+
+    }
+
     const savePanelChangesToDashboard = async (dashId: string) => {
+      if(!isValid()){
+        return
+      }
       if (editMode.value) {
         await updatePanel(
           store,

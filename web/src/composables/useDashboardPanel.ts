@@ -11,7 +11,7 @@ const getDefaultDashboardPanelData = () => (
         filter: <any>[]
       },
       config: {
-        title: "Chart",
+        title: "",
         description: "",
         show_legends: false,
       },
