@@ -22,7 +22,6 @@ import { useRouter } from "vue-router";
 import IndexList from "./IndexList.vue"
 import useDashboardPanelData from "../../../composables/useDashboardPanel";
 
-
     export default defineComponent({
         name: "GetFields",
         props:[],
@@ -32,9 +31,7 @@ import useDashboardPanelData from "../../../composables/useDashboardPanel";
         setup(){
             const store = useStore();
             const router = useRouter();
-            const $q = useQuasar();
-            const { t } = useI18n();
-            const {dashboardPanelData} = useDashboardPanelData()
+            const { dashboardPanelData } = useDashboardPanelData()
 
             return {
                 store,

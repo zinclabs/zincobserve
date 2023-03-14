@@ -39,6 +39,7 @@ export default defineComponent({
   emits: ["update:selectedChartType"],
 
   setup() {
+    // array of charts
     const chartsArray = ref([
       {
         image: "img:" + getImageURL("images/dashboard/charts/area-graph.png"),

@@ -46,8 +46,8 @@ export default defineComponent({
       data: [],
     });
 
+    //render the plotly chart if the chart type is not table
     onUpdated(() => {
-      console.log("updated");
       if (props.data.type != "table") {
         renderChart();
       }
@@ -56,6 +56,7 @@ export default defineComponent({
     const plotRef: any = ref(null);
     const chartID = ref("chart1");
 
+    //change the timeObject if the date is change
     let selectedTimeObj = computed(function () {
       return props.selectedTimeDate;
     });
@@ -147,7 +148,6 @@ export default defineComponent({
       const sqlQueryModified = queryData;
 
       // get query object
-      // TODO: update queryData to sqlQueryModified
       const timestamps = selectedTimeObj.value;
 
       let startISOTimestamp: any;
@@ -213,6 +213,7 @@ export default defineComponent({
 
       let traces;
 
+      //generate the traces value f chart
       traces = yAxisKeys.map((key: any) => {
         const trace = {
           name: props.data.fields?.y.find((it: any) => it.label == key).column,
@@ -228,8 +229,9 @@ export default defineComponent({
         return trace;
       });
 
-      console.log("Query: populating traces: ", traces);
+      // console.log("Query: populating traces: ", traces);
 
+      //generate the layout value of chart
       const layout: any = {
         title: false,
         showlegend: props.data.config?.show_legends,
@@ -261,6 +263,7 @@ export default defineComponent({
       });
     };
 
+    // change the axis value based on chart type
     const getTraceValuesByChartType = (xAxisKey: string, yAxisKey: string) => {
       const trace: any = {
         ...getPropsByChartTypeForTraces(),
@@ -278,18 +281,22 @@ export default defineComponent({
       return trace;
     };
 
+    // get the x axis key
     const getXAxisKey = () => {
       return props.data.fields.x.map((it: any) => it.label)[0];
     };
 
+    // get the y axis key
     const getYAxisKeys = () => {
       return props.data.fields.y.map((it: any) => it.label);
     };
 
+    // get the axis data using key
     const getAxisDataFromKey = (key: string) => {
       return searchQueryData.data.map((item) => item[key]);
     };
 
+    // return chart type based on selected chart
     const getPropsByChartTypeForTraces = () => {
       switch (props.data.type) {
         case "bar":
@@ -325,6 +332,7 @@ export default defineComponent({
       }
     };
 
+    // layout changes based on selected chart type
     const getPropsByChartTypeForLayout = async () => {
       switch (props.data.type) {
         case "bar":
