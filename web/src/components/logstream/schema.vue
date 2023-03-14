@@ -97,7 +97,7 @@
               v-show="indexData.defaultFts"
               class="warning-msg"
               style="font-weight: normal"
-              >- Using default fts keys , as no fts keys are set for
+              >- Using default fts keys, as no fts keys are set for
               stream.</label
             >
           </div>

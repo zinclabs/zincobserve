@@ -80,7 +80,7 @@ impl Telemetry {
             .await;
 
         if res.is_err() {
-            log::error!("Error sending event {} , {:?}", event, res);
+            log::error!("Error sending event {}, {:?}", event, res);
         }
     }
 

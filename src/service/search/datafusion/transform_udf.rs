@@ -241,7 +241,7 @@ mod tests {
     #[tokio::test]
     async fn time_range() {
         //let data_time = parse_time("2021-01-01T00:00:00.000Z").unwrap();
-        let sql = "select * ,luaconcat(log,pod_id) as c from t ";
+        let sql = "select *, luaconcat(log,pod_id) as c from t ";
 
         // define a schema.
         let schema = Arc::new(Schema::new(vec![

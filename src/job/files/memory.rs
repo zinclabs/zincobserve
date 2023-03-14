@@ -24,6 +24,7 @@ use crate::common::utils::populate_file_meta;
 use crate::infra::cluster;
 use crate::infra::config::{get_parquet_compression, CONFIG};
 use crate::infra::file_lock;
+use crate::infra::metrics;
 use crate::infra::storage;
 use crate::infra::storage::generate_partioned_file_key;
 use crate::meta::common::FileMeta;
@@ -126,6 +127,16 @@ async fn move_files_to_storage() -> Result<(), anyhow::Error> {
                         Ok(_) => {
                             if file_lock::FILES.write().unwrap().remove(&path).is_none() {
                                 log::error!("[JOB] Failed to remove memory file: {}", path)
+                            } else {
+                                // println!("removed file: {}", key);
+                                let columns = key.split('/').collect::<Vec<&str>>();
+                                let _ = columns[0].to_string();
+                                let org_id = columns[1].to_string();
+                                let stream_type = columns[2].to_string();
+                                let stream_name = columns[3].to_string();
+                                metrics::INGEST_WAL_USED_BYTES
+                                    .with_label_values(&[&org_id, &stream_name, &stream_type])
+                                    .sub(meta.original_size as i64);
                             }
                         }
                         Err(e) => log::error!(
@@ -154,6 +165,10 @@ async fn upload_file(
 ) -> Result<(String, FileMeta, StreamType), anyhow::Error> {
     let file_size = buf.len() as u64;
     log::info!("[JOB] File upload begin: memory: {}", path_str);
+
+    metrics::INGEST_WAL_READ_BYTES
+        .with_label_values(&[org_id, stream_name, stream_type.to_string().as_str()])
+        .inc_by(file_size);
 
     let mut schema_reader = BufReader::new(buf.as_ref());
     let inferred_schema = infer_json_schema(&mut schema_reader, None).unwrap();

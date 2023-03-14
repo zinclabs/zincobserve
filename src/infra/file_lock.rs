@@ -20,6 +20,7 @@ use std::sync::{Arc, RwLock};
 
 use crate::infra::config::CONFIG;
 use crate::infra::ider;
+use crate::infra::metrics;
 use crate::meta::StreamType;
 
 lazy_static! {
@@ -37,6 +38,9 @@ pub struct RwFile {
     use_cache: bool,
     file: Option<RwLock<File>>,
     cache: Option<RwLock<BytesMut>>,
+    org_id: String,
+    stream_name: String,
+    stream_type: StreamType,
     dir: String,
     name: String,
     expired: i64,
@@ -247,6 +251,9 @@ impl RwFile {
             use_cache,
             file,
             cache,
+            org_id: org_id.to_string(),
+            stream_name: stream_name.to_string(),
+            stream_type,
             dir: dir_path,
             name: file_name,
             expired: chrono::Utc::now().timestamp() + CONFIG.limit.max_file_retention_time as i64,
@@ -255,6 +262,20 @@ impl RwFile {
 
     #[inline]
     pub fn write(&self, data: &[u8]) {
+        metrics::INGEST_WAL_USED_BYTES
+            .with_label_values(&[
+                &self.org_id,
+                &self.stream_name,
+                self.stream_type.to_string().as_str(),
+            ])
+            .add(data.len() as i64);
+        metrics::INGEST_WAL_WRITE_BYTES
+            .with_label_values(&[
+                &self.org_id,
+                &self.stream_name,
+                self.stream_type.to_string().as_str(),
+            ])
+            .inc_by(data.len() as u64);
         if self.use_cache {
             self.cache
                 .as_ref()

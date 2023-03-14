@@ -81,8 +81,8 @@ use crate::meta;
     ),
     modifiers(&SecurityAddon),
     tags(
-        (name = "Streams" , description = "Stream retrieval & management operations"),
-        (name = "Ingestion" , description = "Data ingestion operations"),
+        (name = "Streams", description = "Stream retrieval & management operations"),
+        (name = "Ingestion", description = "Data ingestion operations"),
         (name = "Search", description = "Search/Query operations"),
         (name = "Functions", description = "Functions retrieval & management operations"),
         (name = "Users", description = "Users retrieval & management operations"),

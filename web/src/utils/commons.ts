@@ -409,7 +409,7 @@ export const deletePanel = async (store:any, dashboardId:any, panelId:any) => {
     currentDashboard.layouts.splice(layoutIndex, 1);
     currentDashboard.layouts = currentDashboard.layouts;
 
-    await updateDashboard(store, store.state.selectedOrganization.identifier , dashboardId, currentDashboard )
+    await updateDashboard(store, store.state.selectedOrganization.identifier, dashboardId, currentDashboard )
 }
 
 export const updatePanel = async (store:any, dashboardId:any, panelData:any) => {
@@ -427,7 +427,7 @@ export const updatePanel = async (store:any, dashboardId:any, panelData:any) => 
       currentDashboard.panels[panelIndex] = panelData;
       currentDashboard.panels = currentDashboard.panels;
   
-      await updateDashboard(store, store.state.selectedOrganization.identifier , dashboardId, currentDashboard )
+      await updateDashboard(store, store.state.selectedOrganization.identifier, dashboardId, currentDashboard )
   }
 
 export const updateDashboard = async (store: any, org:any, dashboardId:any, currentDashboardData: any) => {

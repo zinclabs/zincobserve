@@ -807,6 +807,10 @@ mod tests {
                 "select * from table where str_match(log, 'a=b')",
             ),
             (
+                "select * from table wherkubernetes.pod='dc03-eed1-be27'",
+                r#"select * from table "wherkubernetes.pod"='dc03-eed1-be27'"#,
+            ),
+            (
                 "select * from table where str_match(log, '中文') AND match_all('abc') AND time_range(_timestamp, '2020-01-01 00:00:00', '2020-01-01 00:00:00')",
                 "select * from table where str_match(log, '中文') AND match_all('abc') AND time_range(_timestamp, '2020-01-01 00:00:00', '2020-01-01 00:00:00')",
             ),

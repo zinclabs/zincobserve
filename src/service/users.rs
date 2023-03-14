@@ -99,7 +99,7 @@ pub async fn update_user(
                         is_updated = true;
                     } else {
                         message =
-                        "Existing/old password mismatch , please provide valid existing password"
+                            "Existing/old password mismatch, please provide valid existing password"
                     }
                 } else if self_update && user.old_password.is_none() {
                     message = "Please provide existing password"

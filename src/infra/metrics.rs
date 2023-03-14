@@ -56,13 +56,13 @@ lazy_static! {
             .const_labels(create_const_labels()),
         &["organization", "stream", "stream_type"],
     ).expect("Metric created");
-    pub static ref INGEST_WAL_WRITE_BYTES: IntGaugeVec = IntGaugeVec::new(
+    pub static ref INGEST_WAL_WRITE_BYTES: IntCounterVec = IntCounterVec::new(
         Opts::new("ingest_wal_write_bytes", "Ingestor WAL write bytes")
             .namespace(NAMESPACE)
             .const_labels(create_const_labels()),
         &["organization", "stream", "stream_type"],
     ).expect("Metric created");
-    pub static ref INGEST_WAL_READ_BYTES: IntGaugeVec = IntGaugeVec::new(
+    pub static ref INGEST_WAL_READ_BYTES: IntCounterVec = IntCounterVec::new(
         Opts::new("ingest_wal_read_bytes", "Ingestor WAL read bytes")
             .namespace(NAMESPACE)
             .const_labels(create_const_labels()),
@@ -165,19 +165,19 @@ lazy_static! {
         Opts::new("meta_storage_bytes", "Metadata storage used bytes")
             .namespace(NAMESPACE)
             .const_labels(create_const_labels()),
-        &["node"],
+        &[],
     ).expect("Metric created");
     pub static ref META_STORAGE_KEYS: IntGaugeVec = IntGaugeVec::new(
         Opts::new("meta_storage_keys", "Metadata storage item keys")
             .namespace(NAMESPACE)
             .const_labels(create_const_labels()),
-        &["node"],
+        &[],
     ).expect("Metric created");
     pub static ref META_NUM_NODES: IntGaugeVec = IntGaugeVec::new(
         Opts::new("meta_num_nodes", "Metadata node nums")
             .namespace(NAMESPACE)
             .const_labels(create_const_labels()),
-        &["role"],
+        &["node_role"],
     ).expect("Metric created");
     pub static ref META_NUM_ORGANIZATIONS: IntGaugeVec = IntGaugeVec::new(
         Opts::new("meta_num_organizations", "Metadata organization nums")

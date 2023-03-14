@@ -7,7 +7,7 @@
 { "index" : { "_index" : "olympics_schema" } } 
 {"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "MALOKINIS, Ioannis", "Country": "GRE", "Gender": "Men", "Event": "100M Freestyle For Sailors", "Medal": "Gold", "Season": "summer"}
 { "index" : { "_index" : "olympics_schema" } } 
-{"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "CHOROPHAS, Efstathios", "Country": "GRE", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Bronze", "Season": "summer" ,"newField":"Test"}
+{"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "CHOROPHAS, Efstathios", "Country": "GRE", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Bronze", "Season": "summer", "newField":"Test"}
 { "index" : { "_index" : "olympics_schema" } } 
 {"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "HAJOS, Alfred", "Country": "HUN", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Gold", "Season": "summer"}
 { "index" : { "_index" : "olympics_schema" } } 
@@ -293,7 +293,7 @@
 { "index" : { "_index" : "olympics_schema" } } 
 {"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "MALOKINIS, Ioannis", "Country": "GRE", "Gender": "Men", "Event": "100M Freestyle For Sailors", "Medal": "Gold", "Season": "summer"}
 { "index" : { "_index" : "olympics_schema" } } 
-{"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "CHOROPHAS, Efstathios", "Country": "GRE", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Bronze", "Season": "summer" ,"newField":"Test"}
+{"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "CHOROPHAS, Efstathios", "Country": "GRE", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Bronze", "Season": "summer", "newField":"Test"}
 { "index" : { "_index" : "olympics_schema" } } 
 {"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "HAJOS, Alfred", "Country": "HUN", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Gold", "Season": "summer"}
 { "index" : { "_index" : "olympics_schema" } } 
@@ -579,7 +579,7 @@
 { "index" : { "_index" : "olympics_schema" } } 
 {"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "MALOKINIS, Ioannis", "Country": "GRE", "Gender": "Men", "Event": "100M Freestyle For Sailors", "Medal": "Gold", "Season": "summer"}
 { "index" : { "_index" : "olympics_schema" } } 
-{"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "CHOROPHAS, Efstathios", "Country": "GRE", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Bronze", "Season": "summer" ,"newField":"Test"}
+{"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "CHOROPHAS, Efstathios", "Country": "GRE", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Bronze", "Season": "summer", "newField":"Test"}
 { "index" : { "_index" : "olympics_schema" } } 
 {"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "HAJOS, Alfred", "Country": "HUN", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Gold", "Season": "summer"}
 { "index" : { "_index" : "olympics_schema" } } 
@@ -865,7 +865,7 @@
 { "index" : { "_index" : "olympics_schema" } } 
 {"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "MALOKINIS, Ioannis", "Country": "GRE", "Gender": "Men", "Event": "100M Freestyle For Sailors", "Medal": "Gold", "Season": "summer"}
 { "index" : { "_index" : "olympics_schema" } } 
-{"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "CHOROPHAS, Efstathios", "Country": "GRE", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Bronze", "Season": "summer" ,"newField":"Test"}
+{"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "CHOROPHAS, Efstathios", "Country": "GRE", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Bronze", "Season": "summer", "newField":"Test"}
 { "index" : { "_index" : "olympics_schema" } } 
 {"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "HAJOS, Alfred", "Country": "HUN", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Gold", "Season": "summer"}
 { "index" : { "_index" : "olympics_schema" } } 
@@ -1151,7 +1151,7 @@
 { "index" : { "_index" : "olympics_schema" } } 
 {"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "MALOKINIS, Ioannis", "Country": "GRE", "Gender": "Men", "Event": "100M Freestyle For Sailors", "Medal": "Gold", "Season": "summer"}
 { "index" : { "_index" : "olympics_schema" } } 
-{"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "CHOROPHAS, Efstathios", "Country": "GRE", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Bronze", "Season": "summer" ,"newField":"Test"}
+{"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "CHOROPHAS, Efstathios", "Country": "GRE", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Bronze", "Season": "summer", "newField":"Test"}
 { "index" : { "_index" : "olympics_schema" } } 
 {"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "HAJOS, Alfred", "Country": "HUN", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Gold", "Season": "summer"}
 { "index" : { "_index" : "olympics_schema" } } 
@@ -1437,7 +1437,7 @@
 { "index" : { "_index" : "olympics_schema" } } 
 {"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "MALOKINIS, Ioannis", "Country": "GRE", "Gender": "Men", "Event": "100M Freestyle For Sailors", "Medal": "Gold", "Season": "summer"}
 { "index" : { "_index" : "olympics_schema" } } 
-{"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "CHOROPHAS, Efstathios", "Country": "GRE", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Bronze", "Season": "summer" ,"newField":"Test"}
+{"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "CHOROPHAS, Efstathios", "Country": "GRE", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Bronze", "Season": "summer", "newField":"Test"}
 { "index" : { "_index" : "olympics_schema" } } 
 {"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "HAJOS, Alfred", "Country": "HUN", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Gold", "Season": "summer"}
 { "index" : { "_index" : "olympics_schema" } } 
@@ -1723,7 +1723,7 @@
 { "index" : { "_index" : "olympics_schema" } } 
 {"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "MALOKINIS, Ioannis", "Country": "GRE", "Gender": "Men", "Event": "100M Freestyle For Sailors", "Medal": "Gold", "Season": "summer"}
 { "index" : { "_index" : "olympics_schema" } } 
-{"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "CHOROPHAS, Efstathios", "Country": "GRE", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Bronze", "Season": "summer" ,"newField":"Test"}
+{"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "CHOROPHAS, Efstathios", "Country": "GRE", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Bronze", "Season": "summer", "newField":"Test"}
 { "index" : { "_index" : "olympics_schema" } } 
 {"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "HAJOS, Alfred", "Country": "HUN", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Gold", "Season": "summer"}
 { "index" : { "_index" : "olympics_schema" } } 
@@ -2009,7 +2009,7 @@
 { "index" : { "_index" : "olympics_schema" } } 
 {"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "MALOKINIS, Ioannis", "Country": "GRE", "Gender": "Men", "Event": "100M Freestyle For Sailors", "Medal": "Gold", "Season": "summer"}
 { "index" : { "_index" : "olympics_schema" } } 
-{"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "CHOROPHAS, Efstathios", "Country": "GRE", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Bronze", "Season": "summer" ,"newField":"Test"}
+{"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "CHOROPHAS, Efstathios", "Country": "GRE", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Bronze", "Season": "summer", "newField":"Test"}
 { "index" : { "_index" : "olympics_schema" } } 
 {"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "HAJOS, Alfred", "Country": "HUN", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Gold", "Season": "summer"}
 { "index" : { "_index" : "olympics_schema" } } 
@@ -2295,7 +2295,7 @@
 { "index" : { "_index" : "olympics_schema" } } 
 {"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "MALOKINIS, Ioannis", "Country": "GRE", "Gender": "Men", "Event": "100M Freestyle For Sailors", "Medal": "Gold", "Season": "summer"}
 { "index" : { "_index" : "olympics_schema" } } 
-{"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "CHOROPHAS, Efstathios", "Country": "GRE", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Bronze", "Season": "summer" ,"newField":"Test"}
+{"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "CHOROPHAS, Efstathios", "Country": "GRE", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Bronze", "Season": "summer", "newField":"Test"}
 { "index" : { "_index" : "olympics_schema" } } 
 {"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "HAJOS, Alfred", "Country": "HUN", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Gold", "Season": "summer"}
 { "index" : { "_index" : "olympics_schema" } } 
@@ -2581,7 +2581,7 @@
 { "index" : { "_index" : "olympics_schema" } } 
 {"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "MALOKINIS, Ioannis", "Country": "GRE", "Gender": "Men", "Event": "100M Freestyle For Sailors", "Medal": "Gold", "Season": "summer"}
 { "index" : { "_index" : "olympics_schema" } } 
-{"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "CHOROPHAS, Efstathios", "Country": "GRE", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Bronze", "Season": "summer" ,"newField":"Test"}
+{"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "CHOROPHAS, Efstathios", "Country": "GRE", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Bronze", "Season": "summer", "newField":"Test"}
 { "index" : { "_index" : "olympics_schema" } } 
 {"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "HAJOS, Alfred", "Country": "HUN", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Gold", "Season": "summer"}
 { "index" : { "_index" : "olympics_schema" } } 
@@ -2867,7 +2867,7 @@
 { "index" : { "_index" : "olympics_schema" } } 
 {"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "MALOKINIS, Ioannis", "Country": "GRE", "Gender": "Men", "Event": "100M Freestyle For Sailors", "Medal": "Gold", "Season": "summer"}
 { "index" : { "_index" : "olympics_schema" } } 
-{"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "CHOROPHAS, Efstathios", "Country": "GRE", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Bronze", "Season": "summer" ,"newField":"Test"}
+{"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "CHOROPHAS, Efstathios", "Country": "GRE", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Bronze", "Season": "summer", "newField":"Test"}
 { "index" : { "_index" : "olympics_schema" } } 
 {"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "HAJOS, Alfred", "Country": "HUN", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Gold", "Season": "summer"}
 { "index" : { "_index" : "olympics_schema" } } 
@@ -3153,7 +3153,7 @@
 { "index" : { "_index" : "olympics_schema" } } 
 {"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "MALOKINIS, Ioannis", "Country": "GRE", "Gender": "Men", "Event": "100M Freestyle For Sailors", "Medal": "Gold", "Season": "summer"}
 { "index" : { "_index" : "olympics_schema" } } 
-{"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "CHOROPHAS, Efstathios", "Country": "GRE", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Bronze", "Season": "summer" ,"newField":"Test"}
+{"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "CHOROPHAS, Efstathios", "Country": "GRE", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Bronze", "Season": "summer", "newField":"Test"}
 { "index" : { "_index" : "olympics_schema" } } 
 {"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "HAJOS, Alfred", "Country": "HUN", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Gold", "Season": "summer"}
 { "index" : { "_index" : "olympics_schema" } } 
@@ -3439,7 +3439,7 @@
 { "index" : { "_index" : "olympics_schema" } } 
 {"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "MALOKINIS, Ioannis", "Country": "GRE", "Gender": "Men", "Event": "100M Freestyle For Sailors", "Medal": "Gold", "Season": "summer"}
 { "index" : { "_index" : "olympics_schema" } } 
-{"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "CHOROPHAS, Efstathios", "Country": "GRE", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Bronze", "Season": "summer" ,"newField":"Test"}
+{"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "CHOROPHAS, Efstathios", "Country": "GRE", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Bronze", "Season": "summer", "newField":"Test"}
 { "index" : { "_index" : "olympics_schema" } } 
 {"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "HAJOS, Alfred", "Country": "HUN", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Gold", "Season": "summer"}
 { "index" : { "_index" : "olympics_schema" } } 
@@ -3725,7 +3725,7 @@
 { "index" : { "_index" : "olympics_schema" } } 
 {"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "MALOKINIS, Ioannis", "Country": "GRE", "Gender": "Men", "Event": "100M Freestyle For Sailors", "Medal": "Gold", "Season": "summer"}
 { "index" : { "_index" : "olympics_schema" } } 
-{"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "CHOROPHAS, Efstathios", "Country": "GRE", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Bronze", "Season": "summer" ,"newField":"Test"}
+{"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "CHOROPHAS, Efstathios", "Country": "GRE", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Bronze", "Season": "summer", "newField":"Test"}
 { "index" : { "_index" : "olympics_schema" } } 
 {"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "HAJOS, Alfred", "Country": "HUN", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Gold", "Season": "summer"}
 { "index" : { "_index" : "olympics_schema" } } 
@@ -4011,7 +4011,7 @@
 { "index" : { "_index" : "olympics_schema" } } 
 {"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "MALOKINIS, Ioannis", "Country": "GRE", "Gender": "Men", "Event": "100M Freestyle For Sailors", "Medal": "Gold", "Season": "summer"}
 { "index" : { "_index" : "olympics_schema" } } 
-{"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "CHOROPHAS, Efstathios", "Country": "GRE", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Bronze", "Season": "summer" ,"newField":"Test"}
+{"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "CHOROPHAS, Efstathios", "Country": "GRE", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Bronze", "Season": "summer", "newField":"Test"}
 { "index" : { "_index" : "olympics_schema" } } 
 {"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "HAJOS, Alfred", "Country": "HUN", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Gold", "Season": "summer"}
 { "index" : { "_index" : "olympics_schema" } } 
@@ -4297,7 +4297,7 @@
 { "index" : { "_index" : "olympics_schema" } } 
 {"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "MALOKINIS, Ioannis", "Country": "GRE", "Gender": "Men", "Event": "100M Freestyle For Sailors", "Medal": "Gold", "Season": "summer"}
 { "index" : { "_index" : "olympics_schema" } } 
-{"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "CHOROPHAS, Efstathios", "Country": "GRE", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Bronze", "Season": "summer" ,"newField":"Test"}
+{"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "CHOROPHAS, Efstathios", "Country": "GRE", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Bronze", "Season": "summer", "newField":"Test"}
 { "index" : { "_index" : "olympics_schema" } } 
 {"Year": 1896, "City": "Athens", "Sport": "Aquatics", "Discipline": "Swimming", "Athlete": "HAJOS, Alfred", "Country": "HUN", "Gender": "Men", "Event": "1200M Freestyle", "Medal": "Gold", "Season": "summer"}
 { "index" : { "_index" : "olympics_schema" } } 

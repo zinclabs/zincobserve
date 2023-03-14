@@ -23,6 +23,7 @@ mod alert_manager;
 mod compact;
 mod file_list;
 mod files;
+mod metrics;
 mod prom;
 mod telemetry;
 
@@ -100,6 +101,7 @@ pub async fn init() -> Result<(), anyhow::Error> {
     tokio::task::spawn(async move { files::memory::run().await });
     tokio::task::spawn(async move { file_list::run().await });
     tokio::task::spawn(async move { prom::run().await });
+    tokio::task::spawn(async move { metrics::run().await });
 
     Ok(())
 }
