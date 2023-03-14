@@ -415,7 +415,7 @@ struct StreamMeta {
 }
 
 pub async fn send_ingest_notification(mut trigger: Trigger, alert: Alert) {
-    let _ = send_notification(&alert.destination, &trigger.clone()).await;
+    let _ = send_notification(&alert, &trigger.clone()).await;
     trigger.last_sent_at = Utc::now().timestamp_micros();
     trigger.count += 1;
     let _ = triggers::save_trigger(trigger.alert_name.clone(), trigger.clone()).await;

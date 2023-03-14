@@ -12,12 +12,160 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use ahash::HashMap;
 use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value};
 use std::fmt;
 use utoipa::ToSchema;
 
 use super::search::Query;
+
+#[derive(Clone, Debug, Serialize, Deserialize, ToSchema)]
+pub struct Alert {
+    #[serde(default)]
+    pub name: String,
+    #[serde(default)]
+    pub stream: String,
+    #[schema(value_type = Option<SearchQuery>)]
+    pub query: Option<Query>,
+    pub condition: Condition,
+    pub duration: i64,
+    pub frequency: i64,
+    pub time_between_alerts: i64,
+    pub destination: String,
+    #[serde(default)]
+    pub is_real_time: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub context_attributes: Option<HashMap<String, String>>,
+}
+
+#[derive(Clone, Debug, Default, Eq, PartialEq, Serialize, Deserialize, ToSchema)]
+pub struct AlertDestination {
+    pub url: String,
+    pub method: AlertHTTPType,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub headers: Option<HashMap<String, String>>,
+    pub template: String,
+}
+
+impl AlertDestination {
+    pub fn to_dest_resp(&self, template: Option<DestinationTemplate>) -> AlertDestinationResponse {
+        AlertDestinationResponse {
+            url: self.url.clone(),
+            method: self.method.clone(),
+            headers: self.headers.clone(),
+            template,
+        }
+    }
+}
+
+#[derive(Clone, Debug, Default, Eq, PartialEq, Serialize, Deserialize, ToSchema)]
+pub struct AlertDestinationResponse {
+    pub url: String,
+    pub method: AlertHTTPType,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub headers: Option<HashMap<String, String>>,
+    pub template: Option<DestinationTemplate>,
+}
+
+#[derive(Clone, Debug, Default, Eq, PartialEq, Serialize, Deserialize, ToSchema)]
+pub enum AlertHTTPType {
+    #[default]
+    #[serde(rename = "post")]
+    POST,
+    #[serde(rename = "put")]
+    PUT,
+    #[serde(rename = "get")]
+    GET,
+}
+
+impl fmt::Display for AlertHTTPType {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            AlertHTTPType::POST => write!(f, "post"),
+            AlertHTTPType::PUT => write!(f, "put"),
+            AlertHTTPType::GET => write!(f, "get"),
+        }
+    }
+}
+
+#[derive(Clone, Debug, Default, Eq, PartialEq, Serialize, Deserialize, ToSchema)]
+pub struct DestinationTemplate {
+    pub name: Option<String>,
+    pub body: Value,
+}
+
+#[derive(Clone, Debug, Default, Eq, PartialEq, Serialize, Deserialize, ToSchema)]
+pub enum AlertDestType {
+    #[default]
+    #[serde(rename = "slack")]
+    Slack,
+    #[serde(rename = "alertmanager")]
+    AlertManager,
+}
+
+impl fmt::Display for AlertDestType {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            AlertDestType::Slack => write!(f, "slack"),
+            AlertDestType::AlertManager => write!(f, "alertmanager"),
+        }
+    }
+}
+
+impl PartialEq for Alert {
+    fn eq(&self, other: &Self) -> bool {
+        self.name == other.name && self.stream == other.stream
+    }
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize, ToSchema)]
+pub struct AlertList {
+    pub list: Vec<Alert>,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct Trigger {
+    #[serde(default)]
+    pub timestamp: i64,
+    #[serde(default)]
+    pub is_valid: bool,
+    #[serde(default)]
+    pub alert_name: String,
+    #[serde(default)]
+    pub stream: String,
+    #[serde(default)]
+    pub org: String,
+    #[serde(default)]
+    pub last_sent_at: i64,
+    #[serde(default)]
+    pub count: i64,
+    #[serde(default)]
+    pub is_ingest_time: bool,
+}
+
+impl Default for Trigger {
+    fn default() -> Self {
+        Trigger {
+            timestamp: 0,
+            is_valid: true,
+            alert_name: String::new(),
+            stream: String::new(),
+            org: String::new(),
+            last_sent_at: 0,
+            count: 0,
+            is_ingest_time: false,
+        }
+    }
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct TriggerTimer {
+    #[serde(default)]
+    pub updated_at: i64,
+    #[serde(default)]
+    pub expires_at: i64,
+}
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "camelCase")]
@@ -144,102 +292,6 @@ impl Default for AllOperator {
     fn default() -> Self {
         Self::EqualTo
     }
-}
-
-#[derive(Clone, Debug, Serialize, Deserialize, ToSchema)]
-pub struct Alert {
-    #[serde(default)]
-    pub name: String,
-    #[serde(default)]
-    pub stream: String,
-    #[schema(value_type = Option<SearchQuery>)]
-    pub query: Option<Query>,
-    pub condition: Condition,
-    pub duration: i64,
-    pub frequency: i64,
-    pub time_between_alerts: i64,
-    pub destination: Vec<AlertDestination>,
-    #[serde(default)]
-    pub is_real_time: bool,
-}
-
-#[derive(Clone, Debug, Default, Eq, PartialEq, Serialize, Deserialize, ToSchema)]
-pub struct AlertDestination {
-    pub url: String,
-    #[serde(rename = "type")]
-    pub dest_type: AlertDestType,
-}
-
-#[derive(Clone, Debug, Default, Eq, PartialEq, Serialize, Deserialize, ToSchema)]
-pub enum AlertDestType {
-    #[default]
-    #[serde(rename = "slack")]
-    Slack,
-    #[serde(rename = "alertmanager")]
-    AlertManager,
-}
-
-impl fmt::Display for AlertDestType {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            AlertDestType::Slack => write!(f, "slack"),
-            AlertDestType::AlertManager => write!(f, "alertmanager"),
-        }
-    }
-}
-
-impl PartialEq for Alert {
-    fn eq(&self, other: &Self) -> bool {
-        self.name == other.name && self.stream == other.stream
-    }
-}
-
-#[derive(Clone, Debug, Serialize, Deserialize, ToSchema)]
-pub struct AlertList {
-    pub list: Vec<Alert>,
-}
-
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct Trigger {
-    #[serde(default)]
-    pub timestamp: i64,
-    #[serde(default)]
-    pub is_valid: bool,
-    #[serde(default)]
-    pub alert_name: String,
-    #[serde(default)]
-    pub stream: String,
-    #[serde(default)]
-    pub org: String,
-    #[serde(default)]
-    pub last_sent_at: i64,
-    #[serde(default)]
-    pub count: i64,
-    #[serde(default)]
-    pub is_ingest_time: bool,
-}
-
-impl Default for Trigger {
-    fn default() -> Self {
-        Trigger {
-            timestamp: 0,
-            is_valid: true,
-            alert_name: String::new(),
-            stream: String::new(),
-            org: String::new(),
-            last_sent_at: 0,
-            count: 0,
-            is_ingest_time: false,
-        }
-    }
-}
-
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct TriggerTimer {
-    #[serde(default)]
-    pub updated_at: i64,
-    #[serde(default)]
-    pub expires_at: i64,
 }
 
 pub trait Evaluate {

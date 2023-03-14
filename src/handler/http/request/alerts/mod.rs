@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+pub mod destinations;
+pub mod templates;
+
 use actix_web::{delete, get, post, web, HttpResponse, Responder};
 use std::io::Error;
 

@@ -113,8 +113,7 @@ pub async fn handle_trigger(alert_name: &str, alert: Alert) {
                                     && curr_ts - trigger.clone().last_sent_at
                                         > get_micros_from_min(alert.time_between_alerts))
                             {
-                                let _ =
-                                    send_notification(&alert.destination, &trigger.clone()).await;
+                                let _ = send_notification(&alert, &trigger.clone()).await;
                                 local_trigger.last_sent_at = curr_ts;
                             }
                             //Update trigger for last sent

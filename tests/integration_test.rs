@@ -124,11 +124,19 @@ mod tests {
         e2e_delete_dashboard().await;
 
         // alert
+        e2e_post_alert_template().await;
+        e2e_get_alert_template().await;
+        e2e_list_alert_template().await;
+        e2e_post_alert_destination().await;
+        e2e_get_alert_destination().await;
+        e2e_list_alert_destinations().await;
         e2e_post_alert().await;
         e2e_get_alert().await;
         e2e_delete_alert().await;
         e2e_list_alerts().await;
         e2e_list_real_time_alerts().await;
+        e2e_delete_alert_template().await;
+        e2e_delete_alert_destination().await;
 
         // others
         e2e_health_check().await;
@@ -973,6 +981,181 @@ mod tests {
         assert!(resp.status().is_success());
     }
 
+    async fn e2e_post_alert_template() {
+        let auth = setup();
+        let body_str = r#"{"body": {"text": "For stream {stream_name} of organization {org_name} alert {alert_name} of type {alert_type} is active app_name {app_name}"	}}"#;
+        let app = test::init_service(
+            App::new()
+                .app_data(web::JsonConfig::default().limit(CONFIG.limit.req_json_limit))
+                .app_data(web::PayloadConfig::new(CONFIG.limit.req_payload_limit))
+                .configure(get_service_routes)
+                .configure(get_basic_routes),
+        )
+        .await;
+        let req = test::TestRequest::post()
+            .uri(&format!(
+                "/api/{}/alerts/templates/{}",
+                "e2e", "slackTemplate"
+            ))
+            .insert_header(ContentType::json())
+            .append_header(auth)
+            .set_payload(body_str)
+            .to_request();
+        let resp = test::call_service(&app, req).await;
+        assert!(resp.status().is_success());
+    }
+
+    async fn e2e_get_alert_template() {
+        let auth = setup();
+        let app = test::init_service(
+            App::new()
+                .app_data(web::JsonConfig::default().limit(CONFIG.limit.req_json_limit))
+                .app_data(web::PayloadConfig::new(CONFIG.limit.req_payload_limit))
+                .configure(get_service_routes)
+                .configure(get_basic_routes),
+        )
+        .await;
+        let req = test::TestRequest::get()
+            .uri(&format!(
+                "/api/{}/alerts/templates/{}",
+                "e2e", "slackTemplate"
+            ))
+            .insert_header(ContentType::json())
+            .append_header(auth)
+            .to_request();
+        let resp = test::call_service(&app, req).await;
+        assert!(resp.status().is_success());
+    }
+
+    async fn e2e_delete_alert_template() {
+        let auth = setup();
+        let app = test::init_service(
+            App::new()
+                .app_data(web::JsonConfig::default().limit(CONFIG.limit.req_json_limit))
+                .app_data(web::PayloadConfig::new(CONFIG.limit.req_payload_limit))
+                .configure(get_service_routes)
+                .configure(get_basic_routes),
+        )
+        .await;
+        let req = test::TestRequest::delete()
+            .uri(&format!(
+                "/api/{}/alerts/templates/{}",
+                "e2e", "slackTemplate"
+            ))
+            .insert_header(ContentType::json())
+            .append_header(auth)
+            .to_request();
+        let resp = test::call_service(&app, req).await;
+        log::info!("{:?}", resp.status());
+        assert!(resp.status().is_success());
+    }
+
+    async fn e2e_list_alert_template() {
+        let auth = setup();
+        let app = test::init_service(
+            App::new()
+                .app_data(web::JsonConfig::default().limit(CONFIG.limit.req_json_limit))
+                .app_data(web::PayloadConfig::new(CONFIG.limit.req_payload_limit))
+                .configure(get_service_routes)
+                .configure(get_basic_routes),
+        )
+        .await;
+        let req = test::TestRequest::get()
+            .uri(&format!("/api/{}/alerts/templates", "e2e"))
+            .insert_header(ContentType::json())
+            .append_header(auth)
+            .to_request();
+        let resp = test::call_service(&app, req).await;
+        assert!(resp.status().is_success());
+    }
+
+    async fn e2e_post_alert_destination() {
+        let auth = setup();
+        let body_str = r#"{
+                "url": "https://dummy/alert",
+                "method": "post",
+                "template": "slackTemplate",
+                "headers":{
+                    "x_org_id":"Test_header"
+                }
+            }"#;
+        let app = test::init_service(
+            App::new()
+                .app_data(web::JsonConfig::default().limit(CONFIG.limit.req_json_limit))
+                .app_data(web::PayloadConfig::new(CONFIG.limit.req_payload_limit))
+                .configure(get_service_routes)
+                .configure(get_basic_routes),
+        )
+        .await;
+        let req = test::TestRequest::post()
+            .uri(&format!("/api/{}/alerts/destinations/{}", "e2e", "slack"))
+            .insert_header(ContentType::json())
+            .append_header(auth)
+            .set_payload(body_str)
+            .to_request();
+        let resp = test::call_service(&app, req).await;
+        // println!("{:?}", resp);
+        assert!(resp.status().is_success());
+    }
+
+    async fn e2e_get_alert_destination() {
+        let auth = setup();
+        let app = test::init_service(
+            App::new()
+                .app_data(web::JsonConfig::default().limit(CONFIG.limit.req_json_limit))
+                .app_data(web::PayloadConfig::new(CONFIG.limit.req_payload_limit))
+                .configure(get_service_routes)
+                .configure(get_basic_routes),
+        )
+        .await;
+        let req = test::TestRequest::get()
+            .uri(&format!("/api/{}/alerts/destinations/{}", "e2e", "slack"))
+            .insert_header(ContentType::json())
+            .append_header(auth)
+            .to_request();
+        let resp = test::call_service(&app, req).await;
+        assert!(resp.status().is_success());
+    }
+
+    async fn e2e_delete_alert_destination() {
+        let auth = setup();
+        let app = test::init_service(
+            App::new()
+                .app_data(web::JsonConfig::default().limit(CONFIG.limit.req_json_limit))
+                .app_data(web::PayloadConfig::new(CONFIG.limit.req_payload_limit))
+                .configure(get_service_routes)
+                .configure(get_basic_routes),
+        )
+        .await;
+        let req = test::TestRequest::delete()
+            .uri(&format!("/api/{}/alerts/destinations/{}", "e2e", "slack"))
+            .insert_header(ContentType::json())
+            .append_header(auth)
+            .to_request();
+        let resp = test::call_service(&app, req).await;
+        log::info!("{:?}", resp.status());
+        assert!(resp.status().is_success());
+    }
+
+    async fn e2e_list_alert_destinations() {
+        let auth = setup();
+        let app = test::init_service(
+            App::new()
+                .app_data(web::JsonConfig::default().limit(CONFIG.limit.req_json_limit))
+                .app_data(web::PayloadConfig::new(CONFIG.limit.req_payload_limit))
+                .configure(get_service_routes)
+                .configure(get_basic_routes),
+        )
+        .await;
+        let req = test::TestRequest::get()
+            .uri(&format!("/api/{}/alerts/destinations", "e2e"))
+            .insert_header(ContentType::json())
+            .append_header(auth)
+            .to_request();
+        let resp = test::call_service(&app, req).await;
+        assert!(resp.status().is_success());
+    }
+
     async fn e2e_post_alert() {
         let auth = setup();
         let body_str = r#"{                              
@@ -984,10 +1167,10 @@ mod tests {
                                 "duration": 5,
                                 "frequency": 1,
                                 "time_between_alerts": 10,
-                                "destination":[{
-                                    "url":"https://dummy/alert",
-                                    "type":"slack"
-                                }] 
+                                "destination":"slack",
+                                "context_attributes":{
+                                    "app_name":"App1"
+                                } 
                             }"#;
         let app = test::init_service(
             App::new()

@@ -11,12 +11,15 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+use std::sync::Arc;
 
 use crate::common::json;
 use crate::infra::config::STREAM_ALERTS;
 use crate::infra::db::Event;
 use crate::meta::alert::{Alert, AlertList};
-use std::sync::Arc;
+
+pub mod destinations;
+pub mod templates;
 
 pub async fn get(
     org_id: &str,

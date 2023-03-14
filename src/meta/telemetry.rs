@@ -16,9 +16,7 @@ use segment::{message::Track, Client, Message};
 use serde_json::Value;
 use std::collections::HashMap;
 
-use crate::infra::config::{
-    CONFIG, INSTANCE_ID, ROOT_USER, STREAM_SCHEMAS, TELEMETRY_CLIENT, USERS, VERSION,
-};
+use crate::infra::config::{CONFIG, INSTANCE_ID, STREAM_SCHEMAS, TELEMETRY_CLIENT, USERS, VERSION};
 
 #[derive(Clone, Debug, Default)]
 pub struct Telemetry {
@@ -118,10 +116,7 @@ pub fn get_base_info(data: &mut HashMap<String, Value>) -> HashMap<String, Value
     );
 
     data.insert("zo_version".to_string(), VERSION.to_owned().into());
-    data.insert(
-        "root_user".to_string(),
-        serde_json::Value::String(ROOT_USER.get("root").unwrap().clone().email),
-    );
+
     data.clone()
 }
 
@@ -164,19 +159,6 @@ mod test_telemetry {
     use super::*;
     #[test]
     fn test_telemetry_new() {
-        ROOT_USER.insert(
-            "root".to_string(),
-            crate::meta::user::User {
-                email: "admin@zo.dev".to_string(),
-                password: "pass#123".to_string(),
-                role: crate::meta::user::UserRole::Root,
-                salt: String::new(),
-                token: "token".to_string(),
-                first_name: "admin".to_owned(),
-                last_name: "".to_owned(),
-                org: "default".to_string(),
-            },
-        );
         let tel = Telemetry::new();
         let mut props = tel.base_info.clone();
         add_zo_info(&mut props);

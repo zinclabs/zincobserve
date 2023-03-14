@@ -22,7 +22,7 @@ use std::time::Duration;
 use sys_info::hostname;
 
 use crate::common::file::get_file_meta;
-use crate::meta::alert::{AlertList, Trigger, TriggerTimer};
+use crate::meta::alert::{AlertDestination, AlertList, DestinationTemplate, Trigger, TriggerTimer};
 use crate::meta::functions::{FunctionList, Transform};
 use crate::meta::prom::ClusterLeader;
 use crate::meta::user::User;
@@ -61,6 +61,8 @@ lazy_static! {
     pub static ref STREAM_ALERTS: DashMap<String, AlertList> = DashMap::new();
     pub static ref TRIGGERS: DashMap<String, Trigger> = DashMap::new();
     pub static ref TRIGGERS_IN_PROCESS: DashMap<String, TriggerTimer> = DashMap::new();
+    pub static ref ALERTS_TEMPLATES: DashMap<String, DestinationTemplate> = DashMap::new();
+    pub static ref ALERTS_DESTINATIONS: DashMap<String, AlertDestination> = DashMap::new();
 }
 
 #[derive(EnvConfig)]

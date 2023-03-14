@@ -27,6 +27,9 @@ use crate::meta::alert::{Alert, AlertList, Trigger};
 use crate::meta::http::HttpResponse as MetaHttpResponse;
 use crate::meta::search::Query;
 
+pub mod destinations;
+pub mod templates;
+
 pub async fn save_alert(
     org_id: String,
     stream_name: String,
@@ -39,11 +42,24 @@ pub async fn save_alert(
     alert.stream = stream_name.to_string();
     alert.name = name.to_string();
 
+    let in_dest = alert.clone().destination;
+
+    // before saving alert check alert destination
+    let dest = db::alerts::destinations::get(&org_id, &in_dest)
+        .await
+        .unwrap();
+
+    if dest.is_none() {
+        return Ok(HttpResponse::NotFound().json(MetaHttpResponse::error(
+            http::StatusCode::NOT_FOUND.into(),
+            Some(format!("Destination with name {} not found", in_dest)),
+        )));
+    }
+
     // before saving alert check column type to decide numeric condition
     let schema = db::schema::get(&org_id, &stream_name, Some(crate::meta::StreamType::Logs))
         .await
         .unwrap();
-
     let fields = schema.fields;
     if fields.is_empty() {
         return Ok(HttpResponse::NotFound().json(MetaHttpResponse::error(
@@ -189,7 +205,7 @@ pub async fn get_alert(
 
 #[cfg(test)]
 mod test {
-    use crate::meta::alert::{AlertDestType, AlertDestination, AllOperator, Condition};
+    use crate::meta::alert::{AllOperator, Condition};
 
     use super::*;
 
@@ -217,11 +233,9 @@ mod test {
             duration: 1,
             frequency: 1,
             time_between_alerts: 10,
-            destination: vec![AlertDestination {
-                url: "dummy".to_string(),
-                dest_type: AlertDestType::Slack,
-            }],
+            destination: "test".to_string(),
             is_real_time: false,
+            context_attributes: None,
         };
         let res = save_alert(
             "nexus".to_string(),
